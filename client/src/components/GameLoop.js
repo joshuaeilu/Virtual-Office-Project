@@ -6,7 +6,9 @@ import {MOVE_DIRECTIONS, MAP_DIMENSIONS, TILE_SIZE} from './mapConstants';
 import { MY_CHARACTER_INIT_CONFIG } from './characterConstants';
 import {update as updateAllCharactersData} from './slices/allCharactersSlice'
 import {checkMapCollision} from './utils';
-import { use } from 'react';
+import { firebaseDatabase } from '../firebase/firebase';
+import { ref, set, onValue} from 'firebase/database';
+import FirebaseListener from './FirebaseListener';
 
 const GameLoop = ({children, allCharactersData, updateAllCharactersData}) => {
     const canvasRef = useRef(null);
@@ -47,7 +49,8 @@ const GameLoop = ({children, allCharactersData, updateAllCharactersData}) => {
         const newCharacterData = { ...mycharacterData, position: newPosition };
 
         // Update the state with the new character data
-        updateAllCharactersData({ ...allCharactersData, [MY_CHARACTER_INIT_CONFIG.id]: newCharacterData });
+        set(ref(firebaseDatabase, 'users/' + MY_CHARACTER_INIT_CONFIG.id), newCharacterData);
+
         
         }
        }
@@ -83,6 +86,10 @@ const GameLoop = ({children, allCharactersData, updateAllCharactersData}) => {
                 class="main-canvas"
             />
             {children}
+
+            <FirebaseListener firebaseDatabase={firebaseDatabase} updateAllCharactersData={updateAllCharactersData} />
+
+
         </CanvasContext.Provider>
     );
 };
