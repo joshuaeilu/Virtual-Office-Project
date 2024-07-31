@@ -1,10 +1,9 @@
 
-import React, {useEffect, useContext} from 'react';
+import {useEffect, useContext} from 'react';
 import CanvasConext from './CanvasContext';
 import {CHARACTER_IMAGE_SIZE, CHARACTER_CLASSES_MAP} from './characterConstants';
 import {TILE_SIZE} from './mapConstants';
 import {loadCharacter} from './slices/statusSlice';
-import { MY_CHARACTER_INIT_CONFIG } from './characterConstants';
 function OtherCharacter({name, x, y, characterClass}){
     const context = useContext(CanvasConext);
     useEffect(() => {
