@@ -4,6 +4,7 @@ import Grid from './Grid';
 import ImagesBuffer from './ImagesBuffer';
 import Map from './Map';
 import CanvasContext from './CanvasContext';
+import OtherCharacters from './OtherCharacters';
 import MyCharacter from './MyCharacter';
 import {MAP_DIMENSIONS, TILE_SIZE, MAP_TILE_IMAGES} from './mapConstants';
 
@@ -29,6 +30,7 @@ const Office = ({mapImagesLoaded, gameStatus, webrtcSocket}) => {
                 </>
             }
             {gameStatus.mapLoaded && <MyCharacter webrtcSocket={webrtcSocket}/>}
+            {gameStatus.mapLoaded && <OtherCharacters />}
         </>
     );
 };

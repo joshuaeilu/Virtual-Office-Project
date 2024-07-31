@@ -10,6 +10,6 @@ export default function FirebaseListener({firebaseDatabase, updateAllCharactersD
                 updateAllCharactersData(data);
             }
         });
-    }, [updateAllCharactersData])
+    }, [])
     
 }
