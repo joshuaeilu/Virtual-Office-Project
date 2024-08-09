@@ -19,6 +19,11 @@ io.on("connection", (socket) => {
     socket.on("sendOffer", ({callToUserSocketId, callFromUserSocketId, offerSignal}) => {
         
     console.log("sending offer from ", callFromUserSocketId, " to ", callToUserSocketId);
+
+    // Logic to send offer to client 2
+    io.to(callToUserSocketId).emit("receiveOffer", {callFromUserSocketId, offerSignal});
+
+    
 });
 });
 server.listen(PORT, () => console.log(`Server is running on port ${PORT}`));

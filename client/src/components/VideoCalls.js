@@ -5,12 +5,7 @@ import {MY_CHARACTER_INIT_CONFIG} from './characterConstants';
 import InitiatedVideoCall from './InitiatedVideoCall';
 
 
-const getMyCharacterData = (state) => {
-    const myCharacterData = MY_CHARACTER_INIT_CONFIG;
-    
-    console.log('myCharacterData:', myCharacterData);
-    return myCharacterData;
-}
+
 function VideoCalls({myCharacterData, otherCharactersData, webrtcSocket}) {
     const [myStream, setMyStream] = useState();
     useEffect(() => {
@@ -20,10 +15,8 @@ function VideoCalls({myCharacterData, otherCharactersData, webrtcSocket}) {
         });
     }, []);
 
-    useEffect(() => {
-        console.log("myStream updated:", myStream);
-    }, []);
 
+    
 
     const myUserId = myCharacterData.id;
     const initiateCallToUsers = Object.keys(otherCharactersData)
@@ -41,7 +34,7 @@ function VideoCalls({myCharacterData, otherCharactersData, webrtcSocket}) {
                     {Object.keys(initiateCallToUsers).map((userId) => (
                         <InitiatedVideoCall
                             key={initiateCallToUsers[userId].socketId}
-                            mySocketId={myCharacterData.socketId}
+                            mySocketId={webrtcSocket.id}
                             myStream={myStream}
                             othersSocketId={initiateCallToUsers[userId].socketId}
                             webrtcSocket={webrtcSocket}
@@ -54,7 +47,7 @@ function VideoCalls({myCharacterData, otherCharactersData, webrtcSocket}) {
 }
 
 const mapStateToProps = (state) => {
-    const myCharacterData = getMyCharacterData(state);
+    const myCharacterData = MY_CHARACTER_INIT_CONFIG;
     const otherCharactersData = Object.keys(state.allCharacters.users)
     .filter(id => id != MY_CHARACTER_INIT_CONFIG.id)
     .reduce((filteredObj, key) => {

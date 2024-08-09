@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import GameLoop from './components/GameLoop';
 import Office from './components/Office';
 import VideoCalls from './components/VideoCalls';
+
 
 import './App.css';
 import { io } from 'socket.io-client';
@@ -14,6 +15,12 @@ function App() {
   WEBRTC_SOCKET.on('connect', () => {
     setSocketConnected(true);
   });
+
+    // Logging out the offer signal received from the server
+    WEBRTC_SOCKET.on('receiveOffer', ({ callFromUserSocketId, offerSignal }) => {
+      console.log('Offer signal received from ', callFromUserSocketId, ' with signal: ', offerSignal);
+    });
+
   return (
     <>
         <header>        
@@ -23,6 +30,8 @@ function App() {
               <GameLoop>
                 <Office webrtcSocket={WEBRTC_SOCKET}/>
               </GameLoop>
+
+              
               <VideoCalls webrtcSocket={WEBRTC_SOCKET}/>
               
           </main>
