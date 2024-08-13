@@ -25,5 +25,13 @@ io.on("connection", (socket) => {
 
     
 });
+
+//Listen for sendAnswer Event
+socket.on("sendAnswer", ({callFromUserSocketId, callToUserSocketId, answerSignal}) =>{
+
+    console.log("sending answer from ", callToUserSocketId, " to ", callFromUserSocketId );
+    //Send answer to callFromUserSocketId
+    io.to(callFromUserSocketId).emit("receiveAnswer", {callToUserSocketId, answerSignal})
+})
 });
 server.listen(PORT, () => console.log(`Server is running on port ${PORT}`));

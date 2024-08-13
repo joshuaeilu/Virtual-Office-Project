@@ -16,11 +16,7 @@ function App() {
     setSocketConnected(true);
   });
 
-    // Logging out the offer signal received from the server
-    WEBRTC_SOCKET.on('receiveOffer', ({ callFromUserSocketId, offerSignal }) => {
-      console.log('Offer signal received from ', callFromUserSocketId, ' with signal: ', offerSignal);
-    });
-
+ 
   return (
     <>
         <header>        

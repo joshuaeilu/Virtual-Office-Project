@@ -20,6 +20,12 @@ function InitiatedVideoCall({ mySocketId, myStream, othersSocketId, webrtcSocket
 
     useEffect(() => {
         peerRef.current = createPeer({ othersSocketId, mySocketId, myStream, webrtcSocket });
+
+        //Listening on the answer signal and printing the answer signal
+        webrtcSocket.on("receiveAnswer", payload => {
+            console.log("received Answer from ", payload.callToUserSocketId, "offersReceived", payload.answerSignal);
+        })
+
     }, [othersSocketId, mySocketId, myStream, webrtcSocket, createPeer]);
 
     return <></>;
