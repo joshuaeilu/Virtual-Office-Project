@@ -10,6 +10,7 @@ import ReceivedVideoCall from './ReceivedVideoCall';
 function VideoCalls({myCharacterData, otherCharactersData, webrtcSocket}) {
     const [myStream, setMyStream] = useState();
     const [offersReceived, setOffersReceived] = useState({});
+
     useEffect(() => {
         navigator.mediaDevices.getUserMedia({video: true, audio: true})
         .then((stream) => {
@@ -53,16 +54,17 @@ function VideoCalls({myCharacterData, otherCharactersData, webrtcSocket}) {
                     ))}
 
                     {Object.keys(offersReceived).map((othersSocketId) => {
-                        const matchingUserIds = Object.keys(otherCharactersData)
-                        .filter((otherUserId) => otherCharactersData[otherUserId].socketId === othersSocketId)
-                        console.assert(
-                            matchingUserIds.length === 1,
-                            "Unexpected list of matching user ids", 
-                            matchingUserIds
-                        )
+                        // const matchingUserIds = Object.keys(otherCharactersData)
+                        // .filter((otherUserId) => otherCharactersData[otherUserId].socketId === othersSocketId)
+                        // console.assert(
+                        //     matchingUserIds.length === 1,
+                        //     "Unexpected list of matching user ids", 
+                        //     matchingUserIds
+                        // )
+
                         return <ReceivedVideoCall
                         key={othersSocketId}
-                        mySocketId={myCharacterData.socketId}
+                        mySocketId={webrtcSocket.id}
                         myStream={myStream}
                         othersSocketId={othersSocketId}
                         webrtcSocket={webrtcSocket}

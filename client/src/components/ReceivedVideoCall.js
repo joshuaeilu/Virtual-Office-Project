@@ -5,6 +5,9 @@ import Peer from 'simple-peer';
 function ReceivedVideoCall({mySockedId, myStream, othersSocketId, webrtcSocket, offerSignal}){
     const peerRef = useRef();
     const [othersStream, setOthersStream] = useState();
+    const setVideoNode = useCallback((videoNode) => {
+        videoNode && (videoNode.srcObject = othersStream);
+    }, [othersStream]);
 
     const createPeer = useCallback((othersSocketId, mySockedId, myStream, webrtcSocket, offerSignal) => {
         const peer = new Peer({
@@ -13,7 +16,7 @@ function ReceivedVideoCall({mySockedId, myStream, othersSocketId, webrtcSocket, 
             stream: myStream,
         });
         peer.on('signal', signal => {
-            webrtcSocket.emit('sendAnswer', {callFromUserSocketId: othersSocketId, callToUserSocketId: mySockedId, answerSignal: signal})
+            webrtcSocket.emit('sendAnswer', {callFromUserSocketId: othersSocketId, callToUserSocketId: webrtcSocket.id, answerSignal: signal})
         });
         peer.signal(offerSignal);
         return peer;
@@ -21,9 +24,29 @@ function ReceivedVideoCall({mySockedId, myStream, othersSocketId, webrtcSocket, 
 
     useEffect(() => {
         peerRef.current = createPeer(othersSocketId, mySockedId, myStream, webrtcSocket, offerSignal);
+
+        //Listening on the answer signal and printing the answer signal
+        webrtcSocket.on("receiveAnswer", payload => {
+            
+            if(payload.callToUserSocketId === othersSocketId){
+                peerRef.current.signal(payload.answerSignal);
+                console.log("receive answer signal from ", payload.answerSignal);
+                
+            }
+        });
+
+peerRef.current.on('stream', (stream) => {
+    
+    setOthersStream(stream)});
+
+
     }, [mySockedId, myStream, othersSocketId, webrtcSocket]);
 
-    return <></>;
+    return <>
+        {othersStream && <video width="200px" ref={setVideoNode} autoPlay={true} />}
+
+    
+    </>;
 }
 
 export default ReceivedVideoCall;
